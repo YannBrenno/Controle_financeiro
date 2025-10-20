@@ -404,7 +404,7 @@
     function saveDividas(){ state.dividas=tempDividas.map(x=>({...x,valorTotal:toNumber(x.valorTotal),parcelas:toInt(x.parcelas,1),fim:ensureDebtEndOrDefault(x)})).filter(x=>(x.nome?.trim()?.length??0)>0 || x.valorTotal>0); saveState(); updateCards(); closeModal(document.getElementById('modal-dividas')); }
 
     // ---------------- Import/Export ----------------
-    function exportJSON(){ const pretty=JSON.stringify(state,null,2); const blob=new Blob([pretty],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`finance-data-${new Date().toISOString().slice(0,10)}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); }
+    function exportJSON(){const pretty=JSON.stringify(state,null,2);const blob=new Blob([pretty],{type:'application/json'});const url=URL.createObjectURL(blob);const d=new Date();const f=`Controle_Export_${String(d.getDate()).padStart(2,'0')}_${String(d.getMonth()+1).padStart(2,'0')}_${d.getFullYear()}_${String(d.getHours()).padStart(2,'0')}_${String(d.getMinutes()).padStart(2,'0')}.json`;const a=document.createElement('a');a.href=url;a.download=f;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);}
     function importJSON(file){ if(!file) return; const reader=new FileReader(); reader.onload=()=>{ try{ state=normalizeState(JSON.parse(reader.result)); saveState(); buildForecastCards(FORECAST_MONTHS); updateCards(); document.querySelectorAll('.modal.show').forEach(m=>closeModal(m)); }catch{ alert('Arquivo inválido.'); } }; reader.onerror=()=>alert('Não foi possível ler o arquivo.'); reader.readAsText(file,'utf-8'); }
 
     // ---------------- Eventos ----------------
